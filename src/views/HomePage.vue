@@ -1,3 +1,59 @@
+<script setup lang="ts">
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, onIonViewDidEnter } from '@ionic/vue';
+import { ref, onMounted } from 'vue'
+import { authService } from '@/services/firebase.authservice';
+import { useRouter } from 'vue-router';
+import {
+  collection,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
+
+const currentUserData = ref(null);
+const database = getFirestore();
+const formulaTeams = ref([]);
+const router = useRouter();
+
+const currentUser = () => {
+  return authService.currentUser();
+}
+
+const login = () => {
+  router.push('/authentication')
+}
+
+const logout = async () => {
+  try{
+    await authService.logout();
+    currentUserData.value = null;
+  }catch (error) {
+    console.log("Error logging out: ", error);
+  }
+};
+
+onIonViewDidEnter(async () => {
+  currentUserData.value = await currentUser();
+  fetchFormulaTeams();
+})
+
+const refreshFormulaTeamView = async (event: CustomEvent) => {
+  await fetchFormulaTeams();
+  event.target.complete();
+}
+
+const fetchFormulaTeams = (async () => {
+  const results: any[] = [];
+  const formulaTeamsSnap = await getDocs(collection(database, "formulaTeams"));
+  formulaTeamsSnap.forEach((doc) => {
+    results.push({id: doc.id, ...doc.data()});
+  });
+
+  formulaTeams.value = [...results]
+
+})
+
+</script>
+
 <template>
   <ion-page>
     <ion-header :translucent="true">
@@ -21,9 +77,6 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-</script>
 
 <style scoped>
 #container {
