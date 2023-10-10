@@ -1,4 +1,5 @@
 Formula 1 Teams Dashboard
+
 Project Description
 The Formula 1 Teams Dashboard is a web application that provides detailed information about Formula 1 teams and their drivers. It's built using a combination of modern web technologies, making it a powerful and user-friendly resource for Formula 1 enthusiasts.
 
