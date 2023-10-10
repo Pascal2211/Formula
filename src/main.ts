@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
-import { initializeApp } from "firebase/app";
+
 import { IonicVue } from '@ionic/vue';
+import { initializeApp } from "firebase/app";
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -30,7 +32,7 @@ import './theme/variables.css';
 // Your web app's Firebase configuration
 //Bytt ut 2 med 4
 const firebaseConfig = {
-  apiKey: "AIzaSyBufYAA0xdS4G5A6W5aOpowqHSBNj4dLH2",
+  apiKey: "AIzaSyBufYAA0xdS4G5A6W5aOpowqHSBNj4dLH4",
   authDomain: "formula-30243.firebaseapp.com",
   projectId: "formula-30243",
   storageBucket: "formula-30243.appspot.com",

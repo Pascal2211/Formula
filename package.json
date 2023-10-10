@@ -21,6 +21,7 @@
     "@ionic/vue-router": "^7.0.0",
     "firebase": "^10.4.0",
     "ionicons": "^7.0.0",
+    "routes": "^2.1.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
