@@ -1,17 +1,14 @@
-<script setup lang="ts">
+<script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, onIonViewDidEnter } from '@ionic/vue';
 import { ref, onMounted } from 'vue'
 import { authService } from '@/services/firebase.authservice';
 import { useRouter } from 'vue-router';
-import {
-  collection,
-  getDocs,
-  getFirestore,
-} from "firebase/firestore";
+
+import { defineComponent } from 'vue';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 const currentUserData = ref(null);
-const database = getFirestore();
-const formulaTeams = ref([]);
 const router = useRouter();
 
 const currentUser = () => {
@@ -33,24 +30,32 @@ const logout = async () => {
 
 onIonViewDidEnter(async () => {
   currentUserData.value = await currentUser();
-  fetchFormulaTeams();
+  fetchTeams();
 })
 
-const refreshFormulaTeamView = async (event: CustomEvent) => {
-  await fetchFormulaTeams();
-  event.target.complete();
-}
 
-const fetchFormulaTeams = (async () => {
-  const results: any[] = [];
-  const formulaTeamsSnap = await getDocs(collection(database, "formulaTeams"));
-  formulaTeamsSnap.forEach((doc) => {
-    results.push({id: doc.id, ...doc.data()});
-  });
-
-  formulaTeams.value = [...results]
-
-})
+export default defineComponent({
+  data() {
+    return {
+      teams: [] as Array<any>, // Change the type to match your team structure
+    };
+  },
+  methods: {
+    async fetchTeams() {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'FormulaTeams'));
+        querySnapshot.forEach((doc) => {
+          this.teams.push(doc.data());
+        });
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    },
+  },
+  async created() {
+    await this.fetchTeams();
+  },
+});
 
 
 </script>
@@ -77,19 +82,28 @@ const fetchFormulaTeams = (async () => {
           </div>
       </ion-toolbar>
     </ion-header>
-
-    <ion-content :fullscreen="true">
-        <ion-refresher slot="fixed" @ionRefresh="refreshFormulaTeamView($event)">
-          <ion-refresher-content></ion-refresher-content>
-        </ion-refresher>
-
-        <ion-card v-for="team in formulaTeams" :key="team.id" :router-link="'/detail/' + team.id">
-          <ion-card-header>
-            <ion-card-subtitle>{{ team.motor }}</ion-card-subtitle>
-          </ion-card-header>
-
         
-        </ion-card>
-    </ion-content>
+    <ion-content>
+  <ion-card v-if="teams.length" v-for="(team, index) in teams" :key="index">
+    <ion-card-header>
+      <ion-card-title>{{ team.TeamName }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Constructor:</strong> {{ team.Constructor }}</p>
+      <p><strong>Driver 1:</strong> {{ team.Driver1 }}</p>
+      <p><strong>Driver 2:</strong> {{ team.Driver2 }}</p>
+      <p><strong>ID:</strong> {{ team.ID }}</p>
+      <p><strong>Motor:</strong> {{ team.Motor }}</p>
+      <p><strong>Points:</strong> {{ team.Points }}</p>
+      <p><strong>Team Boss:</strong> {{ team.TeamBoss }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card v-else>
+    <ion-card-content>
+      <p>Loading teams...</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
   </ion-page>
 </template>

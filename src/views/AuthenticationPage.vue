@@ -13,7 +13,7 @@ const userDetails = ref({
 
 const login = async () => {
     try {
-        await authService.login(useDetails.value.email, userDetails.value.password);
+        await authService.login(userDetails.value.email, userDetails.value.password);
         router.replace('/home');
     } 
     catch(error){
