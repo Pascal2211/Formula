@@ -20,10 +20,13 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "@types/firebase": "^3.2.1",
+    "autoprefixer": "^10.4.16",
     "firebase": "^10.5.0",
     "ionicons": "^7.0.0",
+    "postcss": "^8.4.31",
     "router": "^1.3.8",
     "routes": "^2.1.0",
+    "tailwindcss": "^3.3.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

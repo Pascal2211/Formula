@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { authService } from '@/services/firebase.authservice';
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonToggle } from '@ionic/vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
-const inRegisterMode = ref(false)
+/* State */
+
+// The user can toggle between login and register mode in the form to show/hide additional fields
+const inRegisterMode = ref(false);
+
+// Provides two-way data binding between Vue and the input fields in the form
 const userDetails = ref({
     firstName: '',
     email: '',
@@ -13,48 +20,55 @@ const userDetails = ref({
 
 const login = async () => {
     try {
-        await authService.login(userDetails.value.email, userDetails.value.password);
-        router.replace('/home');
-    } 
-    catch(error){
-        console.log(error);
+        await authService.login(userDetails.value.email, userDetails.value.password);     
+        router.replace('/home'); 
+
+    } catch (error) {
+        console.error(error);
     }
 }
-
 const register = async () => {
-    try{
+    try {
         await authService.register(userDetails.value.email, userDetails.value.password);
-        await login()
+        await login();
     } catch (error) {
         console.log(error);
     }
 }
 
-const logout = async () => {
-    try {
-        await authService.logout();
-        router.replace('/home');
-    } catch(error) {
-        console.error(error);
-    }
-}
+// const signInWithGoogle = async ()=>{
+//     try {
+//         await authService.signInWithGoogle();
+//         router.replace('/home');
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+// const logout = async () => {
+//     try {
+//         await authService.logout();     
+//         router.replace('/home');
 
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
 </script>
-
+    
 <template>
     <ion-page>
         <ion-content>
             <ion-list>
                 <ion-list-header>
-                    <ion-label>Label</ion-label>
+                    <ion-label>Baal</ion-label>
                 </ion-list-header>
 
                 <ion-item lines="none">
-                    <ion-label>Ny bruker?</ion-label>
-                    <ion-toggle color="blue" @ion-change="inRegisterMode = !inRegisterMode"></ion-toggle>
+                    <ion-label class="label-mild">Ny bruker?</ion-label>
+                    <ion-toggle color="dark" @ion-change="inRegisterMode = !inRegisterMode"></ion-toggle>
                 </ion-item>
 
-                <Hr />
+                <hr />
 
                 <ion-item v-if="inRegisterMode">
                     <ion-label class="label-mild" position="floating">Fornavn</ion-label>
@@ -79,12 +93,12 @@ const logout = async () => {
                     Logg inn 🏕
                 </ion-button>
 
-
             </ion-list>
+
         </ion-content>
     </ion-page>
 </template>
-
+    
 <style scoped>
 ion-content {
     --ion-background-color: #f4f4f4;

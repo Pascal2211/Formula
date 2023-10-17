@@ -1,14 +1,24 @@
-<script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, onIonViewDidEnter } from '@ionic/vue';
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { authService } from '@/services/firebase.authservice';
 import { useRouter } from 'vue-router';
-
-import { defineComponent } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 
-const currentUserData = ref(null);
+
+interface Team {
+  TeamName: string;
+  Constructor: string;
+  Driver1: string;
+  Driver2: string;
+  ID: string;
+  Motor: string;
+  Points: number;
+  TeamBoss: string;
+}
+
+const teams = ref<Team[]>([]);
+const currentUserData = ref<any>(null);
 const router = useRouter();
 
 const currentUser = () => {
@@ -20,44 +30,29 @@ const login = () => {
 }
 
 const logout = async () => {
-  try{
+  try {
     await authService.logout();
     currentUserData.value = null;
-  }catch (error) {
+  } catch (error) {
     console.log("Error logging out: ", error);
   }
 };
 
-onIonViewDidEnter(async () => {
+const fetchTeams = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'FormulaTeams'));
+    querySnapshot.forEach((doc) => {
+      teams.value.push(doc.data() as Team);
+    });
+  } catch (error) {
+    console.error("Error fetching teams:", error);
+  }
+};
+
+onMounted(async () => {
   currentUserData.value = await currentUser();
-  fetchTeams();
-})
-
-
-export default defineComponent({
-  data() {
-    return {
-      teams: [] as Array<any>, // Change the type to match your team structure
-    };
-  },
-  methods: {
-    async fetchTeams() {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'FormulaTeams'));
-        querySnapshot.forEach((doc) => {
-          this.teams.push(doc.data());
-        });
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    },
-  },
-  async created() {
-    await this.fetchTeams();
-  },
+  await fetchTeams();
 });
-
-
 </script>
 
 <template>
@@ -83,23 +78,23 @@ export default defineComponent({
       </ion-toolbar>
     </ion-header>
         
-    <ion-content>
-  <ion-card v-if="teams.length" v-for="(team, index) in teams" :key="index">
+    <ion-content class="bg-blue-500 grid grid-cols-3 gap-4 p-4">
+  <ion-card v-if="teams.length" v-for="(team, index) in teams" :key="index" class="text-white rounded-lg shadow-lg">
     <ion-card-header>
       <ion-card-title>{{ team.TeamName }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p><strong>Constructor:</strong> {{ team.Constructor }}</p>
-      <p><strong>Driver 1:</strong> {{ team.Driver1 }}</p>
-      <p><strong>Driver 2:</strong> {{ team.Driver2 }}</p>
-      <p><strong>ID:</strong> {{ team.ID }}</p>
-      <p><strong>Motor:</strong> {{ team.Motor }}</p>
-      <p><strong>Points:</strong> {{ team.Points }}</p>
-      <p><strong>Team Boss:</strong> {{ team.TeamBoss }}</p>
+      <p class="bg-sky-100">Constructor: {{ team.Constructor }}</p>
+      <p class="text-black">Driver 1: {{ team.Driver1 }}</p>
+      <p class="text-black">Driver 2: {{ team.Driver2 }}</p>
+      <p class="text-black">ID: {{ team.ID }}</p>
+      <p class="text-black">Motor: {{ team.Motor }}</p>
+      <p class="text-black">Points: {{ team.Points }}</p>
+      <p class="text-black">Team Boss: {{ team.TeamBoss }}</p>
     </ion-card-content>
   </ion-card>
 
-  <ion-card v-else>
+  <ion-card v-else class="text-white rounded-lg shadow-lg">
     <ion-card-content>
       <p>Loading teams...</p>
     </ion-card-content>
@@ -107,3 +102,4 @@ export default defineComponent({
 </ion-content>
   </ion-page>
 </template>
+
