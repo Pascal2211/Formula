@@ -79,7 +79,7 @@ onMounted(async () => {
     </ion-header>
         
     <ion-content class="bg-blue-500 grid grid-cols-3 gap-4 p-4">
-  <ion-card v-if="teams.length" v-for="(team, index) in teams" :key="index" class="text-white rounded-lg shadow-lg">
+  <ion-card v-if="teams" v-for="(team, index) in teams" :key="team.ID" :router-link="'/detail/' + team.ID" class="text-white rounded-lg shadow-lg">
     <ion-card-header>
       <ion-card-title>{{ team.TeamName }}</ion-card-title>
     </ion-card-header>
