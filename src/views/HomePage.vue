@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,  } from 'vue';
 import { authService } from '@/services/firebase.authservice';
 import { useRouter } from 'vue-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { loadingController } from '@ionic/vue';
 
 
 interface Team {
@@ -20,6 +21,7 @@ interface Team {
 const teams = ref<Team[]>([]);
 const currentUserData = ref<any>(null);
 const router = useRouter();
+const isLoading = ref(false)
 
 const currentUser = () => {
   return authService.currentUser();
@@ -39,20 +41,36 @@ const logout = async () => {
 };
 
 const fetchTeams = async () => {
+  isLoading.value = true;
+  const loading = await loadingController.create({
+    message: "Loading the teams",
+    duration: 9
+  });
   try {
+    await loading.present()
     const querySnapshot = await getDocs(collection(db, 'FormulaTeams'));
     querySnapshot.forEach((doc) => {
       teams.value.push(doc.data() as Team);
     });
   } catch (error) {
     console.error("Error fetching teams:", error);
+  }finally{
+    isLoading.value = false;
+    await loading.dismiss();
   }
 };
+
+const refreshTeams = async(event: CustomEvent) => {
+  await fetchTeams()
+  event.target.complete();
+}
 
 onMounted(async () => {
   currentUserData.value = await currentUser();
   await fetchTeams();
 });
+
+
 </script>
 
 <template>
@@ -79,6 +97,9 @@ onMounted(async () => {
     </ion-header>
         
     <ion-content class="bg-blue-500 grid grid-cols-3 gap-4 p-4">
+      <ion-refresher slot="fixed" @ionRefresh="refreshTeams($event)">
+      <ion-refesh-content></ion-refesh-content>
+      </ion-refresher>
   <ion-card v-if="teams" v-for="(team, index) in teams" :key="team.ID" :router-link="'/detail/' + team.ID" class="text-white rounded-lg shadow-lg">
     <ion-card-header>
       <ion-card-title>{{ team.TeamName }}</ion-card-title>
