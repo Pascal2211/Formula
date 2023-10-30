@@ -7,12 +7,14 @@ import { db } from '@/firebase';
 import { loadingController } from '@ionic/vue';
 
 
+
+
 interface Team {
   TeamName: string;
   Constructor: string;
   Driver1: string;
   Driver2: string;
-  ID: string;
+  id: string;
   Motor: string;
   Points: number;
   TeamBoss: string;
@@ -70,6 +72,9 @@ onMounted(async () => {
   await fetchTeams();
 });
 
+const goToDetailPage = (id) => {
+  router.push({ name: 'Detail', params: { id } });
+};
 
 </script>
 
@@ -100,15 +105,16 @@ onMounted(async () => {
       <ion-refresher slot="fixed" @ionRefresh="refreshTeams($event)">
       <ion-refesh-content></ion-refesh-content>
       </ion-refresher>
-  <ion-card v-if="teams" v-for="(team, index) in teams" :key="team.ID" :router-link="'/detail/' + team.ID" class="text-white rounded-lg shadow-lg">
-    <ion-card-header>
+
+      <ion-card size="3" v-if="teams" v-for="(team, index) in teams" :key="team.id" class="content" @click="goToDetailPage(team.id)"> 
+        <ion-card-header>
       <ion-card-title>{{ team.TeamName }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <p class="bg-sky-100">Constructor: {{ team.Constructor }}</p>
       <p class="text-black">Driver 1: {{ team.Driver1 }}</p>
       <p class="text-black">Driver 2: {{ team.Driver2 }}</p>
-      <p class="text-black">ID: {{ team.ID }}</p>
+      <p class="text-black">ID: {{ team.id }}</p>
       <p class="text-black">Motor: {{ team.Motor }}</p>
       <p class="text-black">Points: {{ team.Points }}</p>
       <p class="text-black">Team Boss: {{ team.TeamBoss }}</p>
@@ -123,4 +129,12 @@ onMounted(async () => {
 </ion-content>
   </ion-page>
 </template>
+
+<style scoped>
+.content {
+  height: 225px;
+  width: 100%; /* Adjust the width as per your requirement */
+}
+
+</style>
 

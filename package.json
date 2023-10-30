@@ -21,7 +21,7 @@
     "@ionic/vue-router": "^7.0.0",
     "@types/firebase": "^3.2.1",
     "autoprefixer": "^10.4.16",
-    "firebase": "^10.5.0",
+    "firebase": "^10.5.2",
     "ionicons": "^7.0.0",
     "ngx-tailwind": "^4.0.0",
     "postcss": "^8.4.31",
