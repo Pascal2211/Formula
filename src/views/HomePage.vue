@@ -72,9 +72,7 @@ onMounted(async () => {
   await fetchTeams();
 });
 
-const goToDetailPage = (id) => {
-  router.push({ name: 'Detail', params: { id } });
-};
+
 
 </script>
 
@@ -106,7 +104,7 @@ const goToDetailPage = (id) => {
       <ion-refesh-content></ion-refesh-content>
       </ion-refresher>
 
-      <ion-card size="3" v-if="teams" v-for="(team, index) in teams" :key="team.id" class="content" @click="goToDetailPage(team.id)"> 
+      <ion-card size="3" v-for="team in teams" :key="team.id" :router-link="'/detail/' + team.id"> 
         <ion-card-header>
       <ion-card-title>{{ team.TeamName }}</ion-card-title>
     </ion-card-header>
@@ -119,13 +117,7 @@ const goToDetailPage = (id) => {
       <p class="text-black">Points: {{ team.Points }}</p>
       <p class="text-black">Team Boss: {{ team.TeamBoss }}</p>
     </ion-card-content>
-  </ion-card>
-
-  <ion-card v-else class="text-white rounded-lg shadow-lg">
-    <ion-card-content>
-      <p>Loading teams...</p>
-    </ion-card-content>
-  </ion-card>
+  </ion-card>  
 </ion-content>
   </ion-page>
 </template>
