@@ -2,12 +2,12 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { IFormulaTeams } from "@/models/FormulaTeamsModels";
 
 const db = getFirestore();
 const route = useRoute();
-const id = ref<string>(route.params.id); // Corrected id extraction
-const team = ref<IFormulaTeams | null>(null);
+const teamName = ref<string>(Array.isArray(route.params.teamName) ? route.params.teamName[0] : route.params.teamName); // Check if route.params.teamName is an array
+const team = ref(null);
+const isLoadingTeam = ref(true)
 
 onMounted(async () => {
   await fetchTeam();
@@ -15,10 +15,12 @@ onMounted(async () => {
 
 const fetchTeam = async () => {
   try {
-    const docRef = doc(db, "FormulaTeams", id.value); // Updated collection name
+    const docRef = doc(db, "FormulaTeams", teamName.value); // Use teamName instead of id
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      team.value = docSnap.data() as IFormulaTeams;
+      console.log(docSnap);
+      team.value = docSnap.data();
+      isLoadingTeam.value = false;
     } else {
       console.log("Document does not exist");
     }
@@ -26,6 +28,7 @@ const fetchTeam = async () => {
     console.error("Error fetching document: ", error);
   }
 };
+
 </script>
 
 <template>
@@ -35,18 +38,18 @@ const fetchTeam = async () => {
     </ion-header>
 
     <ion-content class="content">
-      <ion-card v-if="formulaTeams" class="text-white roundeded-lg shadow-lg">
+      <ion-card v-if="team" class="text-white roundeded-lg shadow-lg">
         <ion-card-header>
-          <ion-card-title>{{ formulaTeams.TeamBoss }}</ion-card-title>
+          <ion-card-title>{{ team.Driver2 }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <ion-item>
             <ion-label>Driver 1:</ion-label>
-            <ion-text>{{ formulaTeams.Driver1 }}</ion-text>
+            <ion-text>{{ team.Driver1 }}</ion-text>
           </ion-item>
           <ion-item>
             <ion-label>Driver 2:</ion-label>
-            <ion-text>{{ formulaTeams.Driver2 }}</ion-text>
+            <ion-text>{{ team.Driver2 }}</ion-text>
           </ion-item>
           <!-- Add more ion-item components for other details -->
         </ion-card-content>

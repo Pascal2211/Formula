@@ -104,22 +104,24 @@ onMounted(async () => {
       <ion-refesh-content></ion-refesh-content>
       </ion-refresher>
 
-      <ion-card size="3" v-for="team in teams" :key="team.id" :router-link="'/detail/' + team.id"> 
-        <ion-card-header>
-      <ion-card-title>{{ team.TeamName }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p class="bg-sky-100">Constructor: {{ team.Constructor }}</p>
-      <p class="text-black">Driver 1: {{ team.Driver1 }}</p>
-      <p class="text-black">Driver 2: {{ team.Driver2 }}</p>
-      <p class="text-black">ID: {{ team.id }}</p>
-      <p class="text-black">Motor: {{ team.Motor }}</p>
-      <p class="text-black">Points: {{ team.Points }}</p>
-      <p class="text-black">Team Boss: {{ team.TeamBoss }}</p>
-    </ion-card-content>
-  </ion-card>  
+      <router-link v-for="team in teams" :key="team.id" :to="'/detail/' + team.TeamName">
+        <ion-card size="3">
+          <ion-card-header>
+            <ion-card-title>{{ team.TeamName }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Constructor: {{ team.Constructor }}</p>
+            <p>Driver 1: {{ team.Driver1 }}</p>
+            <p>Driver 2: {{ team.Driver2 }}</p>
+            <p>ID: {{ team.id }}</p>
+            <p>Motor: {{ team.Motor }}</p>
+            <p>Points: {{ team.Points }}</p>
+            <p>Team Boss: {{ team.TeamBoss }}</p>
+          </ion-card-content>
+        </ion-card>
+      </router-link> 
 </ion-content>
-  </ion-page>
+</ion-page>
 </template>
 
 <style scoped>

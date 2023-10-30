@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
-import AuthenticationPage from '../views/AuthenticationPage.vue';
+import AuthenticationPage from '@/views/AuthenticationPage.vue';
 import NewTeamPage from '../views/NewTeamPage.vue';
-import DetailePage from "../views/DetailPage.vue";
+import DetailePage from '@/views/DetailePage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/home'
   },
   {
-    path: '/home',
+    path: '/home', 
     name: 'Home',
     component: HomePage
   },
@@ -26,10 +26,10 @@ const routes: Array<RouteRecordRaw> = [
     component: NewTeamPage,
   },
   {
-    path: "/detail/:id",
-    name: "Detail",
-    component: DetailePage,
-    props: true
+    path: "/detail/:teamName",
+  name: "Detail",
+  component: DetailePage,
+  props: true
   },
 ]
 

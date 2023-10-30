@@ -28,6 +28,9 @@ import '@ionic/vue/css/display.css';
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
+
+app.config.isCustomElement = (tag) => tag.startsWith('ion-'); // Exclude all components starting with "ion-"
+
   
 router.isReady().then(() => {
   app.mount('#app');
