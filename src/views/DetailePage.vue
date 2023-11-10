@@ -34,25 +34,40 @@ const fetchTeam = async () => {
 <template>
   <ion-page>
     <ion-header :translucent="true">
-      <!-- Header content -->
+      <ion-toolbar>
+        <ion-title>Formula 1</ion-title>
+        <ion-buttons slot="end">
+          <ion-button router-link="/new-spot">+</ion-button>
+          <ion-button class="button-auth" fill="solid" color="dark" size="default" @click="login">
+            Logg inn
+          </ion-button> 
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-toolbar>
+          <div class="user-info">
+            <ion-subtitle v-if="currentUserData" class="flex-container">
+                <span class="user-email">Logged in User: {{ currentUserData.email }}</span>
+                <ion-button @click="logout" size="small" fill="clear" class="logout-btn">Logout</ion-button>
+            </ion-subtitle>
+            <ion-subtitle v-else>You haven't logged in</ion-subtitle>
+          </div>
+      </ion-toolbar>
     </ion-header>
 
     <ion-content class="content">
-      <ion-card v-if="team" class="text-white roundeded-lg shadow-lg">
+      <ion-card v-if="team" class="">
         <ion-card-header>
-          <ion-card-title>{{ team.Driver2 }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-item>
-            <ion-label>Driver 1:</ion-label>
-            <ion-text>{{ team.Driver1 }}</ion-text>
-          </ion-item>
-          <ion-item>
-            <ion-label>Driver 2:</ion-label>
-            <ion-text>{{ team.Driver2 }}</ion-text>
-          </ion-item>
-          <!-- Add more ion-item components for other details -->
-        </ion-card-content>
+            <ion-card-title>{{ team.TeamName }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Constructor: {{ team.Constructor }}</p>
+            <p>Driver 1: {{ team.Driver1 }}</p>
+            <p>Driver 2: {{ team.Driver2 }}</p>
+            <p>ID: {{ team.id }}</p>
+            <p>Motor: {{ team.Motor }}</p>
+            <p>Points: {{ team.Points }}</p>
+            <p>Team Boss: {{ team.TeamBoss }}</p>
+          </ion-card-content>
       </ion-card>
 
       <ion-card v-else class="text-white rounded-lg shadow-lg">
@@ -67,8 +82,7 @@ const fetchTeam = async () => {
 <style scoped>
 
 .content{
-  height: 200px;
-  width: 300px;
+  
 }
 
 </style>

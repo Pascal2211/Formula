@@ -5,9 +5,9 @@ import { useRouter } from 'vue-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { loadingController } from '@ionic/vue';
+import { getAuth } from 'firebase/auth';
 
-
-
+const auth = getAuth();
 
 interface Team {
   TeamName: string;
@@ -16,8 +16,9 @@ interface Team {
   Driver2: string;
   id: string;
   Motor: string;
-  Points: number;
+  Points: string;
   TeamBoss: string;
+  Image: String;
 }
 
 const teams = ref<Team[]>([]);
@@ -31,6 +32,10 @@ const currentUser = () => {
 
 const login = () => {
   router.push('/authentication')
+}
+
+const newTeam = () => {
+  router.push('/new-team')
 }
 
 const logout = async () => {
@@ -82,7 +87,7 @@ onMounted(async () => {
       <ion-toolbar>
         <ion-title>Formula 1</ion-title>
         <ion-buttons slot="end">
-          <ion-button router-link="/new-spot">+</ion-button>
+          <ion-button @click="newTeam">+</ion-button>
           <ion-button class="button-auth" fill="solid" color="dark" size="default" @click="login">
             Logg inn
           </ion-button> 
@@ -117,6 +122,7 @@ onMounted(async () => {
             <p>Motor: {{ team.Motor }}</p>
             <p>Points: {{ team.Points }}</p>
             <p>Team Boss: {{ team.TeamBoss }}</p>
+            <img :src="team.Image" class="image">
           </ion-card-content>
         </ion-card>
       </router-link> 
@@ -128,6 +134,11 @@ onMounted(async () => {
 .content {
   height: 225px;
   width: 100%; /* Adjust the width as per your requirement */
+}
+
+.image{
+  height: 100px;
+  width: 100px;
 }
 
 </style>

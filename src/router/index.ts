@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
 import AuthenticationPage from '@/views/AuthenticationPage.vue';
 import NewTeamPage from '../views/NewTeamPage.vue';
-import DetailePage from '@/views/DetailePage.vue'
+import DetailePage from '@/views/DetailePage.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {

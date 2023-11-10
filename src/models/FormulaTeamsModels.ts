@@ -5,8 +5,9 @@ export interface IFormulaTeams {
     Driver2: string;
     id: string;
     Motor: string;
-    Points: number;
+    Points: string;
     TeamBoss: string;
+    Image: string[];
 }
 
 export interface IFormulaTeamResponse {
@@ -24,6 +25,7 @@ export interface INewFormulaTeam {
     Driver2: string;
     id: string;
     Motor: string;
-    Points: number;
+    Points: string;
     TeamBoss: string;
+    Image: string[];
 }

@@ -3,7 +3,10 @@ import { authService } from '@/services/firebase.authservice';
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonToggle } from '@ionic/vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { getAuth, getIdToken  } from 'firebase/auth';
 
+
+const auth = getAuth();
 
 const router = useRouter();
 /* State */
@@ -19,20 +22,36 @@ const userDetails = ref({
 });
 
 const login = async () => {
-    try {
-        await authService.login(userDetails.value.email, userDetails.value.password);     
-        router.replace('/home'); 
-
+    try{
+        const user = await authService.login(userDetails.value.email, userDetails.value.password);
+        const idToken = await user.getIdToken(true);
+        localStorage.setItem("Loginn token", idToken)
+        router.replace('/home')
     } catch (error) {
-        console.error(error);
+        console.log(error)
     }
 }
+
+
+
 const register = async () => {
     try {
         await authService.register(userDetails.value.email, userDetails.value.password);
         await login();
     } catch (error) {
         console.log(error);
+    }
+}
+
+
+const googleLogin =  async () => {
+    try {
+        const user = await authService.signInWithGoogle();
+        const idToken = user.accessToke;
+        localStorage.setItem("Auth_Token: ", idToken)
+        router.replace('/home')
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -44,15 +63,16 @@ const register = async () => {
 //         console.log(error);
 //     }
 // }
-// const logout = async () => {
-//     try {
-//         await authService.logout();     
-//         router.replace('/home');
 
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
+const logout = async () => {
+    try {
+        await authService.logout();     
+        router.replace('/home');
+
+    } catch (error) {
+        console.error(error);
+    }
+}
 </script>
     
 <template>
@@ -86,11 +106,15 @@ const register = async () => {
                 </ion-item>
 
                 <ion-button v-if="inRegisterMode" @click="register" class="button-auth" fill="solid" color="dark" size="default">
-                    Registrer deg 🏕
+                    Registrer deg 🏎️
                 </ion-button>
 
                 <ion-button v-else @click="login"  class="button-auth" fill="solid" color="dark" size="default">
-                    Logg inn 🏕
+                    Logg inn 🏎️🏎️
+                </ion-button>
+
+                <ion-button @click="googleLogin" class="button-auth" fill="solid" color="dark" size="default">
+                    Logg inn med Google
                 </ion-button>
 
             </ion-list>

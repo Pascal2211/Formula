@@ -3,6 +3,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
+    GoogleAuthProvider,
+    signInWithPopup
   } from "firebase/auth";
 
   export const authService = {
@@ -20,5 +22,18 @@ import {
     async currentUser() {
       return await getAuth().currentUser;
     },
+    async signInWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(getAuth(), provider);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        const user = result.user;
+        return user;
+      } catch(error) {
+        console.error("You did a fucking mistake logging inn with google, now i have all your information: ", error);
+        return null
+      }
+    }
 
   };

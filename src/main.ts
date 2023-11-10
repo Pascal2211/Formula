@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { IonicVue } from '@ionic/vue';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 
 
@@ -24,14 +25,17 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 // import './theme/variables.css';
 
+defineCustomElements(window);
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
 
-app.config.isCustomElement = (tag) => tag.startsWith('ion-'); // Exclude all components starting with "ion-"
 
+app.config.isCustomElement = (tag) => tag.startsWith('ion-'); // Exclude all components starting with "ion-"
   
+
 router.isReady().then(() => {
   app.mount('#app');
 });
+
