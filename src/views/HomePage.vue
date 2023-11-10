@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonToggle } from '@ionic/vue';
 import { ref, onMounted,  } from 'vue';
 import { authService } from '@/services/firebase.authservice';
 import { useRouter } from 'vue-router';
@@ -110,18 +111,15 @@ onMounted(async () => {
       </ion-refresher>
 
       <router-link v-for="team in teams" :key="team.id" :to="'/detail/' + team.TeamName">
-        <ion-card size="3">
-          <ion-card-header>
-            <ion-card-title>{{ team.TeamName }}</ion-card-title>
-          </ion-card-header>
+        <ion-card size="4">
+          <ion-card-title>{{ team.TeamName }}</ion-card-title>
           <ion-card-content>
-            <p>Constructor: {{ team.Constructor }}</p>
+            <p>Team boss: {{ team.TeamBoss }}</p>
             <p>Driver 1: {{ team.Driver1 }}</p>
             <p>Driver 2: {{ team.Driver2 }}</p>
-            <p>ID: {{ team.id }}</p>
-            <p>Motor: {{ team.Motor }}</p>
             <p>Points: {{ team.Points }}</p>
-            <p>Team Boss: {{ team.TeamBoss }}</p>
+            <p>Motor: {{ team.Motor }}</p>
+            <p>ID: {{ team.id }}</p>
             <img :src="team.Image" class="image">
           </ion-card-content>
         </ion-card>
@@ -136,9 +134,15 @@ onMounted(async () => {
   width: 100%; /* Adjust the width as per your requirement */
 }
 
+.teamName{
+  visibility: hidden;
+}
+
+
 .image{
-  height: 100px;
-  width: 100px;
+  height: 350px;
+  width: 350px;
+  border-radius: 5px;
 }
 
 </style>

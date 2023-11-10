@@ -81,8 +81,27 @@ const fetchTeam = async () => {
 
 <style scoped>
 
-.content{
-  
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set the height to 100% of the viewport height to center vertically */
+}
+
+/* Style for the square */
+ion-card {
+  width: 400px; /* Set the width of the square */
+  height: 400px; /* Set the height of the square */
+  background-color: #3498db; /* Blue color for the background */
+  color: rgb(244, 28, 28); /* White text color */
+  text-align: center;
+  border-radius: 10px; /* Optional: Add rounded corners */
+}
+
+/* Override the default text color for ion-card-title and ion-card-content */
+ion-card-title,
+ion-card-content {
+  color: rgb(0, 0, 0);
 }
 
 </style>
